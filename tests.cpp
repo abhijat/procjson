@@ -77,6 +77,28 @@ TEST(MiscTests, CheckPID)
     EXPECT_NE(n, 0);
 }
 
+TEST(GetProcessId, SimpleTest)
+{
+    auto pid = get_process_id_from_path("/proc/2211");
+    EXPECT_GT(pid, 0);
+}
+
+TEST(GetProcessId, EmptyPath)
+{
+    EXPECT_THROW(get_process_id_from_path(""), std::invalid_argument);
+}
+
+TEST(GetProcessId, NotAPath)
+{
+    EXPECT_THROW(get_process_id_from_path("foobar"), std::invalid_argument);
+}
+
+TEST(GetProcessId, PathWithSlash)
+{
+    unsigned pid = get_process_id_from_path("/proc/2211/");
+    EXPECT_EQ(2211, pid);
+}
+
 int main(int argc, char** argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
